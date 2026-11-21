@@ -45,7 +45,7 @@ character(len=256) :: BasisAll, Symmetry
 character(len=256), allocatable :: BasisSets(:,:)
 type(XYZAtom), allocatable :: Geom(:)
 
-public :: Clear_XYZ, Out_Raw, Parse_Basis, Parse_Group, Read_XYZ, Symmetry, Write_SewInp
+public :: Clear_XYZ, Get_Fragment_Atom_Counts, Out_Raw, Parse_Basis, Parse_Group, Read_XYZ, Symmetry, Write_SewInp
 
 ! Private extensions to mma interfaces
 
@@ -289,6 +289,31 @@ subroutine Read_XYZ(Lu,Rot,Trans,Replace)
   end if
 
 end subroutine Read_XYZ
+
+subroutine Get_Fragment_Atom_Counts(nFrag,AtomCounts,ierr)
+
+  use stdalloc, only: mma_allocate, mma_deallocate
+
+  integer(kind=iwp), intent(out) :: nFrag, ierr
+  integer(kind=iwp), allocatable, intent(out) :: AtomCounts(:)
+  integer(kind=iwp) :: i, iFrag
+
+  nFrag = 0
+  ierr = 1
+  if (.not. allocated(Geom)) return
+
+  nFrag = maxval(Geom%FileNum)
+  if (nFrag < 1) return
+
+  call mma_allocate(AtomCounts,nFrag,Label='Fragment Atom Counts')
+  AtomCounts(:) = 0
+  do i=1,size(Geom)
+    iFrag = Geom(i)%FileNum
+    if ((iFrag >= 1) .and. (iFrag <= nFrag)) AtomCounts(iFrag) = AtomCounts(iFrag)+1
+  end do
+  ierr = 0
+
+end subroutine Get_Fragment_Atom_Counts
 
 ! Clear allocations
 subroutine Clear_XYZ()

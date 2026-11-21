@@ -947,6 +947,13 @@ Keywords
               </HELP>
               </KEYWORD>
 
+  When the geometry was supplied to :program:`Gateway` with repeated
+  :kword:`COORD` keywords, CASPT2 property calculations also report
+  fragment charges obtained by Loewdin populations. Each XYZ or HDF5
+  coordinate file is treated as one fragment, and the charges are based
+  on the CASPT2 one-particle density. Fragment charge analysis requires
+  C1 symmetry (``NOSYM``).
+
   .. :kword:`NOTRansform`
        This keyword specifies that the wave function should not be transformed
        to use quasi-canonical orbitals, even if :program:`CASPT2` does not know if this

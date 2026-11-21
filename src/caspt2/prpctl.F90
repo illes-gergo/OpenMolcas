@@ -319,6 +319,7 @@ call mma_allocate(Scr,NDENS,Label='Scr')
 
 call DOne_Caspt2(CNAT,nCMO,OCC,nOcc,Scr,nDENS)
 call Put_dArray('D1ao',Scr,nDens)
+call CASPT2_Fragment_Charges(nSym,nBas,bName,Scr,nDens)
 
 Note = 'Temporary orbital file used by prpt.'
 if (mode == 1) Note = 'var'

@@ -83,6 +83,7 @@ set (sources
      diadns.F90
      diafck.F90
      done_caspt2.F90
+     caspt2_fragment_charges.F90
      dpt2_trf.F90
      dpt2_trfstore.F90
      dra2solv.F90

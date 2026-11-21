@@ -42,7 +42,7 @@ use Embedding_Global, only: embOutDensPath, embOutEspPath, embOutGradPath, embOu
                             embWriteDens, embWriteEsp, embWriteGrad, embWriteHess, outGridPath, outGridPathGiven
 #endif
 #ifndef _HAVE_EXTRA_
-use XYZ, only: Clear_XYZ, Parse_Basis, Parse_Group, Read_XYZ, Write_SewInp
+use XYZ, only: Clear_XYZ, Get_Fragment_Atom_Counts, Parse_Basis, Parse_Group, Read_XYZ, Write_SewInp
 #endif
 use Para_Info, only: MyRank
 #ifdef _MOLCAS_MPP_
@@ -89,7 +89,7 @@ character(len=12) :: Previous_Command
 character(len=4) :: CHAR4
 character(len=3) :: Oper(3)
 character :: AngTyp(0:iTabMx)
-integer(kind=iwp), allocatable :: ITmp(:), iScratch(:), nIsot(:,:)
+integer(kind=iwp), allocatable :: FragmentAtomCounts(:), ITmp(:), iScratch(:), nIsot(:,:)
 real(kind=wp), allocatable :: Buffer(:), DMSt(:,:), EFt(:,:), Isotopes(:), mIsot(:), OrigRot(:,:,:), OrigTrans(:,:), RTmp(:,:)
 character(len=180), allocatable :: STDINP(:)
 character(len=128), allocatable :: xb_bas(:)
@@ -3008,6 +3008,9 @@ do
     call Parse_Basis(KeepBasis)
     call Parse_Group(KeepGroup,SymThr)
     call Write_SewInp('COORD',[iBSSE])
+    call Get_Fragment_Atom_Counts(nFragment,FragmentAtomCounts,ierr)
+    if (ierr == 0) call Put_iArray('Fragment Atom Counts',FragmentAtomCounts,nFragment)
+    if (allocated(FragmentAtomCounts)) call mma_deallocate(FragmentAtomCounts)
 #   endif
     if (writeZmat) then
 #     ifdef _HAVE_EXTRA_
